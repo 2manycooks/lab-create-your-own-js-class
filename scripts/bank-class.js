@@ -1,48 +1,42 @@
 class BankAccount {
-    static totalMoney = 0
+    static totalAmount = 0
 
-    constructor(accountType, balance, overdraftFee) {
+    constructor(first, last, maturity, accountType, overdraftFee, balance) {
+        this.first = first
+        this.last = last
+        this.maturity = maturity
         this.accountType = accountType
-        this.balance = 0
         this.overdraftFee = 0
+        this.balance = 0
     }
 
     deposit(amount) {
-        let newAmount = this.balance + amount
-        this.balance += newAmount
-        
+        this.balance += amount
+        BankAccount.totalAmount += amount
     }
 
     withdraw(amount) {
-        this.balance -= amount
-        if(this.balance < 0) {
-            this.overdraftFee += 20
+       if(this.maturity === 'Child') {
+            if(amount > this.balance)
+            console.log('hey kid! ya too broke!')
+        } else {
+            this.balance -= amount
+            BankAccount.totalAmount -= amount
+            if(amount > this.balance) {
+                this.overdraftFee += 20
+            }
         }
     }
 }
 
-// let gabesChecking = new BankAccount('checking')
-// console.log(gabesChecking)
-// gabesChecking.deposit(20)
-// console.log(gabesChecking)
-// gabesChecking.withdraw(30)
-// console.log(gabesChecking)
+let gabesChecking = new BankAccount('Gabe', 'Gangoso', '?', 'Checking')
 
-class ChildBankAccount extends BankAccount {
-    constructor(accountType, balance, overdraftFee) {
-        super(accountType, balance, overdraftFee)
-    }
+gabesChecking.deposit(100)
+console.log(gabesChecking.balance)
+gabesChecking.withdraw(101)
+console.log(gabesChecking.balance)
+console.log(gabesChecking.overdraftFee)
 
-    withdraw(amount) {
-        if (this.balance - amount < 0) {
-            this.overdraftFee = 0
-            console.log(`Hey kid, ya too broke!`)
-        }
-    }
-}
-
-let kiddieAccount = new ChildBankAccount('checking')
-console.log(kiddieAccount)
-kiddieAccount.deposit(20)
-console.log(kiddieAccount)
-kiddieAccount.withdraw(30)
+let babyCash = new BankAccount('Baby', "cash", 'Child', 'Savings')
+babyCash.deposit(5)
+babyCash.withdraw(6)
